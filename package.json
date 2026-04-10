@@ -1,0 +1,33 @@
+{
+  "name": "armada",
+  "version": "1.0.0",
+  "description": "<div align=\"center\">",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aicyraa/Armada.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aicyraa/Armada/issues"
+  },
+  "homepage": "https://github.com/Aicyraa/Armada#readme",
+  "devDependencies": {
+    "css-loader": "^7.1.4",
+    "eslint": "^10.2.0",
+    "globals": "^17.4.0",
+    "html-loader": "^5.1.0",
+    "html-webpack-plugin": "^5.6.6",
+    "jest": "^30.3.0",
+    "prettier": "^3.8.2",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.106.0",
+    "webpack-cli": "^7.0.2",
+    "webpack-dev-server": "^5.2.3"
+  }
+}

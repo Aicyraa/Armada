@@ -1,0 +1,9 @@
+node_modules
+./src/test
+dist
+package-lock.json
+package.json
+eslint.config.mjs
+webpack.common.js
+webpack.prod.js
+webpack.dev.js
