@@ -9,8 +9,8 @@
 ![Static Badge](https://img.shields.io/badge/Prettier-darkblue?style=for-the-badge)
 ![Static Badge](https://img.shields.io/badge/eslint-lightyellow?style=for-the-badge)
 
-![Image](./src/asset/battleship.avif)
+![Image](./src/assets/battleship.avif)
 
 </div>
 
----2
+---
