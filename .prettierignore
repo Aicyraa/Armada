@@ -7,3 +7,5 @@ eslint.config.mjs
 webpack.common.js
 webpack.prod.js
 webpack.dev.js
+babel.config.js
+README.md

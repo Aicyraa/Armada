@@ -1,6 +1,6 @@
 <div align="center">
 
-# ***A r m a d a ⚓***
+# **_A r m a d a ⚓_**
 
 ![Static Badge](https://img.shields.io/badge/Javascript-yellow?style=for-the-badge)
 ![Static Badge](https://img.shields.io/badge/Npm-red?style=for-the-badge)
