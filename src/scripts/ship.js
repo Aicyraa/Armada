@@ -4,8 +4,8 @@ export default class Ship {
    /**
     * Initialize length and hits property of the ship.
     * Details object are passed to Gameboard Class to set the ships positin within its board
-    * @param {Gameboard|class} gameboard - The player / computer gameboard
-    * @param {Object} details - The details of the ship (Length, postion, isVertical)
+    * @param {Gameboard} gameboard - The player / computer gameboard
+    * @param {Object} details - The details of the ship (Length, position (x, y), isVertical)
     * @returns Ship
     */
    constructor(gameboard, details) {
