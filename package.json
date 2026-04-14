@@ -20,6 +20,7 @@
   "bugs": {
     "url": "https://github.com/Aicyraa/Armada/issues"
   },
+  "type": "module", 
   "homepage": "https://github.com/Aicyraa/Armada#readme",
   "devDependencies": {
     "@babel/preset-env": "^7.29.2",
