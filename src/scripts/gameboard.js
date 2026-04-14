@@ -6,17 +6,10 @@ export default class Gameboard {
       M (checkShips) -> Check if all ships are sunkedn 
    */
 
-   // board = new Array(5).fill(new Array(5)).map(row => row.fill(0))
-   board = [
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-   ]
+   board = Array.from({ length: 5 }, () => Array(5).fill(0))
 
+   // Note: Wala pa etong validation ng pag set the position ng ship
    setShip({ length, x, y, isVertical }) {
-      // Note: Wala pa etong validation ng pag set the position ng ship
 
       const positions = [[x, y]]
       // Adds a new position (For expanding the ship in the board)
