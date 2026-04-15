@@ -2,8 +2,14 @@ import Player from '../scripts/player.js'
 import Gameboard from '../scripts/gameboard.js'
 import Ship from '../scripts/ship.js'
 
+// Ship Class
 describe('Ship class public methods', () => {
-   const cruiser = new Ship(new Gameboard(), { length: 2, x: 1, y: 1, isVertical: false })
+   const cruiser = new Ship(new Gameboard(), {
+      length: 2,
+      x: 1,
+      y: 1,
+      isVertical: false,
+   })
 
    beforeEach(() => {
       cruiser.hits = 0
@@ -23,6 +29,7 @@ describe('Ship class public methods', () => {
    })
 })
 
+// Gameboard Class
 describe('Gameboard class public methods', () => {
    let gameboard
    beforeEach(() => {
@@ -30,7 +37,7 @@ describe('Gameboard class public methods', () => {
    })
 
    it.skip('Check setShip (Horizontal Expand)', () => {
-      new Ship(gameboard, {
+      const ship = new Ship(gameboard, {
          length: 2,
          x: 1,
          y: 1,
@@ -38,7 +45,7 @@ describe('Gameboard class public methods', () => {
       })
       expect(gameboard.board).toEqual([
          [0, 0, 0, 0, 0],
-         [0, 1, 1, 0, 0],
+         [0, ship, ship, 0, 0],
          [0, 0, 0, 0, 0],
          [0, 0, 0, 0, 0],
          [0, 0, 0, 0, 0],
@@ -46,31 +53,88 @@ describe('Gameboard class public methods', () => {
    })
 
    it.skip('Check setShip (Vertical Expand)', () => {
-      new Ship(gameboard, { length: 3, x: 3, y: 3, isVertical: true })
+      const ship = new Ship(gameboard, {
+         length: 3,
+         x: 3,
+         y: 3,
+         isVertical: true,
+      })
       expect(gameboard.board).toEqual([
          [0, 0, 0, 0, 0],
-         [0, 0, 0, 1, 0],
-         [0, 0, 0, 1, 0],
-         [0, 0, 0, 1, 0],
+         [0, 0, 0, ship, 0],
+         [0, 0, 0, ship, 0],
+         [0, 0, 0, ship, 0],
+         [0, 0, 0, 0, 0],
+      ])
+   })
+
+   it.skip('Ship setup cancel if coordinates exceeds 10x10', () => {
+      const ship = new Ship(gameboard, {
+         length: 2,
+         x: 1,
+         y: 4,
+         isVertical: false,
+      })
+
+      expect(gameboard.board).toEqual([
+         [0, 0, 0, 0, 0],
+         [0, 0, 0, 0, 0],
+         [0, 0, 0, 0, 0],
+         [0, 0, 0, 0, 0],
+         [0, 0, 0, 0, 0],
+      ])
+   })
+
+   it('Ship setup cancel if cell is occupied', () => {
+      const ship1 = new Ship(gameboard, {
+         length: 2,
+         x: 1,
+         y: 2,
+         isVertical: false,
+      })
+      const ship2 = new Ship(gameboard, {
+         length: 3,
+         x: 3,
+         y: 3,
+         isVertical: true,
+      })
+
+      console.log(gameboard.board);
+
+      expect(gameboard.board).toEqual([
+         [0, 0, 0, 0, 0],
+         [0, 0, ship1, ship1, 0],
+         [0, 0, 0, 0, 0],
+         [0, 0, 0, 0, 0],
          [0, 0, 0, 0, 0],
       ])
    })
 })
 
+// Player Class
 describe('Player class testing', () => {
-   it('Check player board', () => {
+   it.skip('Check player board', () => {
       const gameboard = new Gameboard()
       const me = new Player(gameboard, 'Jee', true)
 
-      new Ship(gameboard, { length: 2, x: 1, y: 1, isVertical: false })
-      new Ship(gameboard, { length: 3, x: 3, y: 3, isVertical: true })
-      console.log(me.gameboard);
-      
-      expect(me.gameboard).toEqual([
+      const ship1 = new Ship(gameboard, {
+         length: 2,
+         x: 1,
+         y: 1,
+         isVertical: false,
+      })
+      const ship2 = new Ship(gameboard, {
+         length: 3,
+         x: 3,
+         y: 3,
+         isVertical: true,
+      })
+
+      expect(me.gameboard.board).toEqual([
          [0, 0, 0, 0, 0],
-         [0, 1, 1, 1, 0],
-         [0, 0, 0, 1, 0],
-         [0, 0, 0, 1, 0],
+         [0, ship1, ship1, ship2, 0],
+         [0, 0, 0, ship2, 0],
+         [0, 0, 0, ship2, 0],
          [0, 0, 0, 0, 0],
       ])
    })

@@ -11,7 +11,7 @@ export default class Ship {
    constructor(gameboard, details) {
       this.length = details.length
       this.hits = 0
-      gameboard.setShip(details)
+      gameboard.setShip(this, details)
    }
 
    hit() {

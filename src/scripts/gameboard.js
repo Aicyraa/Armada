@@ -6,11 +6,36 @@ export default class Gameboard {
       M (checkShips) -> Check if all ships are sunkedn 
    */
 
+   /* 
+      To Do:
+      1. Assign the ship object to the generated positions in "position"
+      2. Validation when setting up ship object
+         * The coordinates should not exceed 10x10.
+         * The cell should be empty.
+      3. Create a game class for managing the game extending the UI class? 
+   */
+
    board = Array.from({ length: 5 }, () => Array(5).fill(0))
 
-   // Note: Wala pa etong validation ng pag set the position ng ship
-   setShip({ length, x, y, isVertical }) {
+   #isPosEmpty(positions) {
+      for (const currPos of positions) {
+         const [x, y] = currPos
+         if (x >= 10 || y >= 10) {
+            return false
+         }
+      }
 
+      for (const currPos of positions) {
+         const [x, y] = currPos
+         if (this.board[x][y] !== 0) {
+            return false
+         }
+      }
+
+      return true
+   }
+
+   setShip(ship, { length, x, y, isVertical }) {
       const positions = [[x, y]]
       // Adds a new position (For expanding the ship in the board)
       for (let i = 0; i < length - 1; i++) {
@@ -19,9 +44,11 @@ export default class Gameboard {
       }
 
       // Expand the ship on the board
-      for (let currPos of positions) {
-         const [x, y] = currPos
-         this.board[x][y] = 1
+      if (this.#isPosEmpty(positions)) {
+         for (let currPos of positions) {
+            const [x, y] = currPos
+            this.board[x][y] = ship
+         }
       }
    }
 }
