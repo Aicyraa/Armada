@@ -8,10 +8,8 @@ export default class Gameboard {
 
    /* 
       To Do:
-      1. Assign the ship object to the generated positions in "position"
-      2. Validation when setting up ship object
-         * The coordinates should not exceed 10x10.
-         * The cell should be empty.
+      1. Receive attack
+      2. checkShips
       3. Create a game class for managing the game extending the UI class? 
    */
 
@@ -50,5 +48,15 @@ export default class Gameboard {
             this.board[x][y] = ship
          }
       }
+   }
+
+   receiveAtk(x, y) {
+      const cell = this.board[x][y]
+      if (cell) {
+         cell.hit()
+         return { c: '#f97575', hit: true }
+      }
+
+      return { c: '#f5f2f2', hit: false  }
    }
 }
