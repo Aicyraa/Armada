@@ -1,6 +1,7 @@
 export default class Gameboard {
    board = Array.from({ length: 5 }, () => Array(5).fill(0))
-
+   ships = []
+   
    #isPosEmpty(positions) {
       for (const currPos of positions) {
          const [x, y] = currPos
@@ -35,6 +36,7 @@ export default class Gameboard {
       }
       if (this.#isPosEmpty(positions)) {
          // Expand the ship on the board
+         this.ships.push(ship)   
          for (const currPos of positions) {
             const [x, y] = currPos
             this.board[x][y] = ship
@@ -54,7 +56,7 @@ export default class Gameboard {
       } 
    }
 
-   checkShips() {
-      
+   areAllShipsSunk() {
+      return this.ships.every(ship => ship.isSunk())
    }
 }

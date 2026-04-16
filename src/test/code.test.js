@@ -5,7 +5,7 @@ import Ship from '../scripts/ship.js'
 // Ship Class
 describe('Ship class public methods', () => {
    const cruiser = new Ship(new Gameboard(), {
-      length: 2,
+      length: 4,
       x: 1,
       y: 1,
       isVertical: false,
@@ -15,12 +15,12 @@ describe('Ship class public methods', () => {
       cruiser.hits = 0
    })
 
-   it.skip('Check if ship is not sunk', () => {
+   it('Check if ship is not sunk', () => {
       cruiser.hit()
       expect(cruiser.isSunk()).toBeFalsy()
    })
 
-   it.skip('Check if ship is sunk', () => {
+   it('Check if ship is sunk', () => {
       cruiser.hit()
       cruiser.hit()
       cruiser.hit()
@@ -36,7 +36,7 @@ describe('Gameboard class public methods', () => {
       gameboard = new Gameboard()
    })
 
-   it.skip('Check setShip (Horizontal Expand)', () => {
+   it('Check setShip (Horizontal Expand)', () => {
       const ship = new Ship(gameboard, {
          length: 2,
          x: 1,
@@ -52,7 +52,7 @@ describe('Gameboard class public methods', () => {
       ])
    })
 
-   it.skip('Check setShip (Vertical Expand)', () => {
+   it('Check setShip (Vertical Expand)', () => {
       const ship = new Ship(gameboard, {
          length: 3,
          x: 3,
@@ -68,7 +68,7 @@ describe('Gameboard class public methods', () => {
       ])
    })
 
-   it.skip('Ship setup cancel if coordinates exceeds 10x10', () => {
+   it('Ship setup cancel if coordinates exceeds 10x10', () => {
       const ship = new Ship(gameboard, {
          length: 2,
          x: 1,
@@ -85,7 +85,7 @@ describe('Gameboard class public methods', () => {
       ])
    })
 
-   it.skip('Ship setup cancel if cell is occupied', () => {
+   it('Ship setup cancel if cell is occupied', () => {
       const ship1 = new Ship(gameboard, {
          length: 2,
          x: 1,
@@ -108,34 +108,64 @@ describe('Gameboard class public methods', () => {
       ])
    })
 
-   it.skip('Check if receiveAtk returns false if the attack hits an empty cell', () => {
+   it('receiveAtk returns false if the attack hits an empty cell', () => {
       new Ship(gameboard, { length: 3, x: 1, y: 1, isVertical: false })
       expect(gameboard.receiveAtk(2, 2)).toEqual({ c: '#f5f2f2', hit: false })
    })
-   
-   it('Check if receiveAtk returns true if it hit a ship ', () => {
+
+   it('receiveAtk returns true if it hit a ship ', () => {
       new Ship(gameboard, { length: 3, x: 1, y: 1, isVertical: false })
       expect(gameboard.receiveAtk(1, 2)).toEqual({ c: '#f97575', hit: true })
    })
 
-   it('Check if receiveAtk returns nothing if same position it shot ', () => {
+   it('receiveAtk returns nothing if same position it shot ', () => {
       new Ship(gameboard, { length: 3, x: 1, y: 1, isVertical: false })
       gameboard.receiveAtk(1, 2)
       expect(gameboard.receiveAtk(1, 2)).toBeUndefined()
    })
 
-
-   it.skip('isSunk returns true if receiveAtk works well', () => {
-      const ship = new Ship(gameboard, { length: 2, x: 1, y: 1, isVertical: false })
+   it('isSunk returns true if receiveAtk works well', () => {
+      const ship = new Ship(gameboard, {
+         length: 2,
+         x: 1,
+         y: 1,
+         isVertical: false,
+      })
       gameboard.receiveAtk(1, 1)
       gameboard.receiveAtk(1, 2)
       expect(ship.isSunk()).toBeTruthy()
    })
+
+   it('areAllShipsSunk returns false when ships are not sunk', () => {
+      const ship = new Ship(gameboard, {
+         length: 2,
+         x: 1,
+         y: 1,
+         isVertical: false,
+      })
+
+      gameboard.receiveAtk(1, 1)
+      expect(gameboard.areAllShipsSunk()).toBeFalsy()
+   })
+
+   it('areAllShipsSunk returns true when there is no ship left', () => {
+      const ship = new Ship(gameboard, {
+         length: 2,
+         x: 1,
+         y: 1,
+         isVertical: false,
+      })
+
+      gameboard.receiveAtk(1, 1)
+      gameboard.receiveAtk(1, 2)
+      expect(gameboard.areAllShipsSunk()).toBeTruthy()
+   })
+
 })
 
 // Player Class
 describe('Player class testing', () => {
-   it.skip('Check player board', () => {
+   it('Check player board', () => {
       const gameboard = new Gameboard()
       const me = new Player(gameboard, 'Jee', true)
 
