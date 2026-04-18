@@ -1,50 +1,40 @@
 import Gameboard from './gameboard.js'
 import Ship from './ship.js'
 import Player from './player.js'
+import Computer from './computer.js'
 
 export default class Controller {
-   /* 
-      Functions:
-      This class is instantiate when the player pressed start
-      * init -> Initializes the players and their respective gameboard
-      * manageShips -> Make the 2 players set their ship 
-      * start -> Start ng battle. 
-         * This function loops like this. ( Shoot, check ships, switch ) Then repeat  
-      * notifyPlayer -> A methods that choose a random text (arr) when the players shot 
-         * Seperate arrays for hit shot and missed shot  
-         * 
-      *   
-   */
-
    human = null
    computer = null
    currentPlayer = null
 
-   #manageShips() {
-      const ships = [
-         [
-            { length: 2, x: 0, y: 2, isVertical: false },
-            { length: 2, x: 2, y: 2, isVertical: false },
-            { length: 2, x: 4, y: 1, isVertical: false },
-         ],
-         [
-            { length: 2, x: 0, y: 0, isVertical: false },
-            { length: 2, x: 4, y: 4, isVertical: true },
-            { length: 2, x: 0, y: 3, isVertical: false },
-         ],
-      ]
-
-      ships.forEach((v, i) => {
-         if (i === 0) {
-            v.forEach(config => {
-               new Ship(this.human.gameboard, {...config})
-            })
-         } else {
-            v.forEach(config => {
-               new Ship(this.computer.gameboard, {...config})
-            })
+   #isPosEmpty(board, positions) {
+      for (const currPos of positions) {
+         const [x, y] = currPos
+         if (board[x][y] !== 0) {
+            return false
          }
-      })
+      }
+      return true
+   }
+
+   #isPosValid(positions) {
+      for (const currPos of positions) {
+         const [x, y] = currPos
+         if (x >= 10 || y >= 10) {
+            return false
+         }
+      }
+      return true
+   }
+
+   #generatePos(x, y, isVertical) {
+      const positions = [[x, y]]
+      for (let i = 0; i < length - 1; i++) {
+         const [x, y] = positions[positions.length - 1]
+         isVertical ? positions.push([x - 1, y]) : positions.push([x, y + 1])
+      }
+      return positions
    }
 
    #switchPlayer(currentPlayer) {
@@ -55,25 +45,73 @@ export default class Controller {
       return currentPlayer === this.human ? this.computer.gameboard : this.human.gameboard
    }
 
+   #setPlayerShips() {
+      const shipsConfig = [
+         { length: 2, name: 'Patrol Boat' },
+         { length: 3, name: 'Destroyer' },
+         { length: 4, name: 'Battleship' },
+      ]
+
+      for (const ship of shipsConfig) {
+         while (true) {
+            // this will change when the DOM is implemented
+            const [x, y, direction] = (prompt(`Enter coordinates for ${ship.name} | ${ship.length} > `)).split(' ')
+            const positions = this.#generatePos(x, y, direction == 1 ? true : false)
+            if (this.#isPosEmpty(this.human.gameboard.board, positions) && this.#isPosValid(positions)) {
+               new Ship(this.human.gameboard, ship.length, positions)
+               break
+            } 
+            continue
+         }
+      }  
+   }
+
+   #setComputerShips() {
+      const shipsConfig = [
+         { length: 2, name: 'Patrol Boat' },
+         { length: 3, name: 'Destroyer' },
+         { length: 4, name: 'Battleship' },
+         { length: 2, name: 'Patrol Boat' },
+         { length: 1, name: 'Lifeboat' },
+      ]
+
+      for (const ship of shipsConfig) {
+         while (true) {
+            const {x, y, direction} = this.computer.getRandomPosition()
+            const positions = this.#generatePos(x, y, direction)
+            if (this.#isPosEmpty(this.computer.gameboard.board, positions) && this.#isPosValid(positions)) {
+               new Ship(this.computer.gameboard, length, positions)
+               break
+            }
+            continue
+         }
+      }
+   }
+
    init() {
       const GBS = [new Gameboard(), new Gameboard()]
       this.human = new Player(GBS[0], 'Jee', true)
-      this.computer = new Player(GBS[1], 'Tyler')
-      this.#manageShips()
+      this.computer = new Computer(GBS[1], 'Tyler')
+      
+      this.#setPlayerShips()
+      this.#setComputerShips()
+      
+      this.currentPlayer = this.human
+      alert("Computer has placed its ships. Battle begins!")
    }
 
    start() {
       while (true) {
-         let enemyGB = this.#getEnemyGB(currentPlayer)
-         let [x, y] = (prompt(`${currentPlayer.name}'s Turn : Enter coords >`)).split(' ')
+         let enemyGB = this.#getEnemyGB(this.currentPlayer)
+         let [x, y] = (prompt(`${this.currentPlayer.name}'s Turn : Enter coords >`)).split(' ')
          enemyGB.receiveAtk(x, y)
-         
+
          if (enemyGB.areAllShipsSunk()) {
-            alert(`Winner: ${currentPlayer.name}` )
+            alert(`Winner ${this.currentPlayer.name}`)
             break
-         } else {
-            currentPlayer = this.#switchPlayer(currentPlayer)
          }
+
+         this.currentPlayer = this.#switchPlayer(this.currentPlayer)
       }
    }
 }

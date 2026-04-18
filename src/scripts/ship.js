@@ -1,17 +1,17 @@
-import Gameboard from './gameboard.js'
-
 export default class Ship {
+   hits = 0
+
    /**
     * Initialize length and hits property of the ship.
     * Details object are passed to Gameboard Class to set the ships positin within its board
     * @param {Gameboard} gameboard - The player / computer gameboard
-    * @param {Object} details - The details of the ship (Length, position (x, y), isVertical)
+    * @param {int} length - The length of the boat
+    * @param {int[]} positions - An array of position 
     * @returns Ship
     */
-   constructor(gameboard, details) {
-      this.length = details.length
-      this.hits = 0
-      gameboard.setShip(this, details)
+   constructor(gameboard, length, positions) {
+      this.length = length
+      gameboard.setShip(this, positions)
    }
 
    hit() {
