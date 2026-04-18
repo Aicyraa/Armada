@@ -50,7 +50,7 @@ export default class Gameboard {
          if (cell) {
             cell.hit()
             return { c: '#f97575', hit: true }
-         } else {
+         } else {  
             return { c: '#f5f2f2', hit: false }
          }
       } 
