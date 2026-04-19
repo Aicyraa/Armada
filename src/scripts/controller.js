@@ -42,16 +42,14 @@ export default class Controller {
    }
 
    #getEnemyGB(currentPlayer) {
-      return currentPlayer === this.human
-         ? this.computer.gameboard
-         : this.human.gameboard
+      return currentPlayer === this.human ? this.computer.gameboard : this.human.gameboard
    }
 
    #setPlayerShips() {
       const shipsConfig = [
          { length: 2, name: 'Patrol Boat' },
-         { length: 3, name: 'Destroyer' },
-         { length: 4, name: 'Battleship' },
+         // { length: 3, name: 'Destroyer' },
+         // { length: 4, name: 'Battleship' },
       ]
 
       for (const ship of shipsConfig) {
@@ -59,17 +57,16 @@ export default class Controller {
             // this will change when the DOM is implemented
             const [x, y, direction] = prompt(
                `Enter coordinates for ${ship.name} | ${ship.length} > `,
-            ).split(' ')
-            const positions = this.#generatePos(
-               ship.length,
-               x,
-               y,
-               direction == 1 ? true : false,
             )
+               .split(' ')
+               .map(v => parseInt(v))
+            const positions = this.#generatePos(ship.length, x, y, direction == 1 ? true : false)
+
             if (
                this.#isPosEmpty(this.human.gameboard.board, positions) &&
                this.#isPosValid(positions)
             ) {
+               console.log('Test')
                new Ship(this.human.gameboard, ship.length, positions)
                break
             }
@@ -115,9 +112,7 @@ export default class Controller {
    start() {
       while (true) {
          let enemyGB = this.#getEnemyGB(this.currentPlayer)
-         let [x, y] = prompt(
-            `${this.currentPlayer.name}'s Turn : Enter coords >`,
-         ).split(' ')
+         let [x, y] = prompt(`${this.currentPlayer.name}'s Turn : Enter coords >`).split(' ')
          enemyGB.receiveAtk(x, y)
 
          if (enemyGB.areAllShipsSunk()) {

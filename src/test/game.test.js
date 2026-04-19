@@ -67,7 +67,10 @@ describe('Gameboard class public methods', () => {
          [1, 2],
          [1, 3],
       ])
-      expect(gameboard.receiveAtk(2, 2)).toEqual({ c: '#f5f2f2', hit: false })
+      expect(gameboard.receiveAtk(2, 2)).toEqual({
+         c: '#f5f2f2',
+         hit: false,
+      })
    })
 
    it('receiveAtk returns hit when attack hits a ship', () => {
@@ -76,7 +79,10 @@ describe('Gameboard class public methods', () => {
          [1, 2],
          [1, 3],
       ])
-      expect(gameboard.receiveAtk(1, 2)).toEqual({ c: '#f97575', hit: true })
+      expect(gameboard.receiveAtk(1, 2)).toEqual({
+         c: '#f97575',
+         hit: true,
+      })
    })
 
    it('receiveAtk returns undefined when same position is shot again', () => {

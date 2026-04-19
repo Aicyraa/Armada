@@ -31,13 +31,7 @@ export default class Computer extends Player {
          const target = this.#potentialTargets.pop()
          const [x, y] = target
 
-         if (
-            !this.#triedShots.has(`${x},${y}`) &&
-            x >= 0 &&
-            x < 5 &&
-            y >= 0 &&
-            y < 5
-         ) {
+         if (!this.#triedShots.has(`${x},${y}`) && x >= 0 && x < 5 && y >= 0 && y < 5) {
             this.#triedShots.add(`${x},${y}`)
             return [x, y]
          }
