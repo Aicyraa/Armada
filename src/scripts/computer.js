@@ -17,8 +17,8 @@ export default class Computer extends Player {
    getRandomPosition(length) {
       const x = Math.floor(Math.random() * 10)
       const y = Math.floor(Math.random() * 10)
-      const isVertical = Math.random() < 0.5 ? true : false 
-      return {x, y, isVertical}
+      const isVertical = Math.random() < 0.5 ? true : false
+      return { x, y, isVertical }
    }
 
    /**

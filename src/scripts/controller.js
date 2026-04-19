@@ -28,7 +28,7 @@ export default class Controller {
       return true
    }
 
-   #generatePos(x, y, isVertical) {
+   #generatePos(length, x, y, isVertical) {
       const positions = [[x, y]]
       for (let i = 0; i < length - 1; i++) {
          const [x, y] = positions[positions.length - 1]
@@ -42,7 +42,9 @@ export default class Controller {
    }
 
    #getEnemyGB(currentPlayer) {
-      return currentPlayer === this.human ? this.computer.gameboard : this.human.gameboard
+      return currentPlayer === this.human
+         ? this.computer.gameboard
+         : this.human.gameboard
    }
 
    #setPlayerShips() {
@@ -55,15 +57,25 @@ export default class Controller {
       for (const ship of shipsConfig) {
          while (true) {
             // this will change when the DOM is implemented
-            const [x, y, direction] = (prompt(`Enter coordinates for ${ship.name} | ${ship.length} > `)).split(' ')
-            const positions = this.#generatePos(x, y, direction == 1 ? true : false)
-            if (this.#isPosEmpty(this.human.gameboard.board, positions) && this.#isPosValid(positions)) {
+            const [x, y, direction] = prompt(
+               `Enter coordinates for ${ship.name} | ${ship.length} > `,
+            ).split(' ')
+            const positions = this.#generatePos(
+               ship.length,
+               x,
+               y,
+               direction == 1 ? true : false,
+            )
+            if (
+               this.#isPosEmpty(this.human.gameboard.board, positions) &&
+               this.#isPosValid(positions)
+            ) {
                new Ship(this.human.gameboard, ship.length, positions)
                break
-            } 
+            }
             continue
          }
-      }  
+      }
    }
 
    #setComputerShips() {
@@ -77,10 +89,13 @@ export default class Controller {
 
       for (const ship of shipsConfig) {
          while (true) {
-            const {x, y, direction} = this.computer.getRandomPosition()
-            const positions = this.#generatePos(x, y, direction)
-            if (this.#isPosEmpty(this.computer.gameboard.board, positions) && this.#isPosValid(positions)) {
-               new Ship(this.computer.gameboard, length, positions)
+            const { x, y, direction } = this.computer.getRandomPosition()
+            const positions = this.#generatePos(ship.length, x, y, direction)
+            if (
+               this.#isPosEmpty(this.computer.gameboard.board, positions) &&
+               this.#isPosValid(positions)
+            ) {
+               new Ship(this.computer.gameboard, ship.length, positions)
                break
             }
             continue
@@ -92,18 +107,17 @@ export default class Controller {
       const GBS = [new Gameboard(), new Gameboard()]
       this.human = new Player(GBS[0], 'Jee', true)
       this.computer = new Computer(GBS[1], 'Tyler')
-      
       this.#setPlayerShips()
       this.#setComputerShips()
-      
       this.currentPlayer = this.human
-      alert("Computer has placed its ships. Battle begins!")
    }
 
    start() {
       while (true) {
          let enemyGB = this.#getEnemyGB(this.currentPlayer)
-         let [x, y] = (prompt(`${this.currentPlayer.name}'s Turn : Enter coords >`)).split(' ')
+         let [x, y] = prompt(
+            `${this.currentPlayer.name}'s Turn : Enter coords >`,
+         ).split(' ')
          enemyGB.receiveAtk(x, y)
 
          if (enemyGB.areAllShipsSunk()) {

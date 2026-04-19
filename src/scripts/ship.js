@@ -6,7 +6,7 @@ export default class Ship {
     * Details object are passed to Gameboard Class to set the ships positin within its board
     * @param {Gameboard} gameboard - The player / computer gameboard
     * @param {int} length - The length of the boat
-    * @param {int[]} positions - An array of position 
+    * @param {int[]} positions - An array of position
     * @returns Ship
     */
    constructor(gameboard, length, positions) {
