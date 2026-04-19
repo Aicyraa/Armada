@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Saira+Stencil:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+   /* Naval Ocean Theme */
+   --ocean-deep: #0a1628;
+   --ocean-dark: #1a2840;
+   --ocean-base: #2d4059;
+   --ocean-light: #4a5f75;
+
+   /* Text */
+   --text: #e1eefc;
+
+   /* Military Gray */
+   --steel: #495057;
+   --battleship-gray: #6c757d;
+   --deck: #8b949e;
+
+   /* Radar & Tech */
+   --radar-green: #00ff88;
+   --radar-dim: #006b3c;
+   --sonar-blue: #00d4ff;
+
+   /* Combat Indicators */
+   --hit-crimson: #dc3545;
+   --miss-white: #e8e8e8;
+   --ship-metal: #a8a8a8;
+
+   /* UI Accents */
+   --command-gold: #c9a227;
+   --warning-amber: #ffc107;
+}
+
+* {
+   margin: 0;
+   padding: 0;
+}
+
+body {
+   font-family:
+      'Saira Stencil', fantasy, sans-serif, 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
+      sans-serif;
+   color: var(--deck);
+   height: 100vh;
+}
+
+main {
+   width: 100%;
+   height: 100%;
+   background-color: var(--ocean-deep);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+/* Helper Css */
+
+.hide {
+   visibility: hidden;
+   pointer-events: none;
+}
+
+/* First Section */
+
+.front-layer {
+   width: 50%;
+   height: 50%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   gap: 2.5rem;
+}
+
+#title {
+   font-size: 6.5rem;
+   letter-spacing: 1.5rem;
+   color: var(--text);
+}
+
+#start-btn {
+   background-color: var(--ocean-dark);
+   border-radius: 12px;
+   font-size: 2rem;
+   font-weight: bold;
+   letter-spacing: 3px;
+   padding: 8px 16px;
+   color: var(--text);
+   cursor: pointer;
+   transition: background-color 100ms ease-in;
+}
+
+#start-btn:hover {
+   background-color: #e6b41e;
+}
+
+/* Second Layer */

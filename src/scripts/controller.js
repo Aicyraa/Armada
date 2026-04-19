@@ -3,7 +3,7 @@ import Ship from './ship.js'
 import Player from './player.js'
 import Computer from './computer.js'
 
-export default class Controller {
+export default class Controller extends DOM {
    human = null
    computer = null
    currentPlayer = null
@@ -48,16 +48,14 @@ export default class Controller {
    #setPlayerShips() {
       const shipsConfig = [
          { length: 2, name: 'Patrol Boat' },
-         // { length: 3, name: 'Destroyer' },
-         // { length: 4, name: 'Battleship' },
+         { length: 3, name: 'Destroyer' },
+         { length: 4, name: 'Battleship' },
       ]
 
       for (const ship of shipsConfig) {
          while (true) {
             // this will change when the DOM is implemented
-            const [x, y, direction] = prompt(
-               `Enter coordinates for ${ship.name} | ${ship.length} > `,
-            )
+            const [x, y, direction] = prompt(` > `)
                .split(' ')
                .map(v => parseInt(v))
             const positions = this.#generatePos(ship.length, x, y, direction == 1 ? true : false)
