@@ -1,7 +1,6 @@
 export default class Player {
-   constructor(gameboard, name, isPlayer = false) {
+   constructor(gameboard, name) {
       this.gameboard = gameboard
       this.name = name
-      this.type = isPlayer ? 'human' : 'computer'
    }
 }

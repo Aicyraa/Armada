@@ -1,25 +1,47 @@
 import Player from './player.js'
+import Ship from './ship.js'
+import { isPosEmpty, isPosValid, generatePos } from '../helpers/logic.helper.js'
 
 export default class Computer extends Player {
    #lastHit = null
    #potentialTargets = []
    #triedShots = new Set()
 
-   constructor(gameboard, name) {
-      super(gameboard, name)
+   constructor(gameboard) {
+      const names = [
+         'Captain Ironclad Drake',
+         'Captain Elias Stormbreaker',
+         'Captain Victor Blacktide',
+         'Captain Magnus Steelwave',
+         'Captain Orion Deepwater',
+      ]
+
+      super(gameboard, names[Math.floor(Math.random() * 5)])
+      this.#setComputerShips()
    }
 
-   /**
-    * Generates random valid coordinates for ship placement
-    * @param {number} length - Length of the ship
-    * @returns {Object} - {x, y, isVertical} or null if no valid position found
-    */
-   getRandomPosition(length) {
-      const x = Math.floor(Math.random() * 10)
-      const y = Math.floor(Math.random() * 10)
-      const isVertical = Math.random() < 0.5 ? true : false
-      return { x, y, isVertical }
+   #setComputerShips() {
+      const shipsConfig = [
+         { length: 2, name: 'Patrol Boat' },
+         { length: 3, name: 'Destroyer' },
+         { length: 4, name: 'Battleship' },
+      ]
+      
+      for (const ship of shipsConfig) {
+         while (true) {
+            const x = Math.floor(Math.random() * 10)
+            const y = Math.floor(Math.random() * 10)
+            const isVertical = Math.random() < 0.5 ? true : false
+            const positions = generatePos(ship.length, x, y, isVertical)
+
+            if (isPosValid(positions) && isPosEmpty(this.gameboard.board, positions)) {
+               new Ship(this.gameboard, ship.length, positions)
+               break
+            }
+         }
+      }
    }
+
 
    /**
     * Generates attack coordinates with basic hunt-and-target logic
