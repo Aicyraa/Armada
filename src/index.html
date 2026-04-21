@@ -13,9 +13,21 @@
          </div>
          <div class="deployment-layer hide">
             <div class="name-container">
-               <input type="text" id="name" required placeholder="Name">
+               <input type="text" id="name" required placeholder="Name" />
             </div>
-            <div class="board-container"></div>
+            <div class="board-container">
+               <div class="docks-container">
+                  <div class="ships" id="patrol-boat" data-length="2" data-isVertical="false" draggable="true">
+                     <span class="blocks"></span>
+                     <span class="blocks"></span>
+                  </div>
+                  <div class="ships" id="battleship" data-length="3" data-isVertical="false" draggable="true">
+                     <span class="blocks"></span>
+                     <span class="blocks"></span>
+                     <span class="blocks"></span>
+                  </div>
+               </div>
+            </div>
             <button type="button" id="continue">continue</button>
          </div>
          <div class="battle-layer hide"></div>

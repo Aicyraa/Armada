@@ -5,39 +5,39 @@
    --color-bg-base: #0a0f1a;
    --color-bg-subtle: #0f1825;
    --color-bg-muted: #141e2e;
- 
+
    /* Surfaces */
    --color-surface-primary: #1a2438;
    --color-surface-secondary: #1f2d45;
    --color-surface-overlay: #243352;
- 
+
    /* Text */
    --color-text-primary: #d4dce8;
    --color-text-secondary: #8a9ab0;
    --color-text-tertiary: #4a5a70;
    --color-text-on-accent: #ffffff;
- 
+
    /* Accent — targeting red */
    --color-accent: #c0392b;
    --color-accent-hover: #e74c3c;
    --color-accent-active: #962d22;
    --color-accent-subtle: #2a1010;
- 
+
    /* Borders */
    --color-border-default: #243352;
    --color-border-strong: #3a5075;
    --color-border-subtle: #1a2438;
- 
+
    /* States */
    --color-hover-bg: #1f2d45;
    --color-focus-ring: #c0392b;
    --color-selected-bg: #2a1010;
- 
+
    /* Shadows */
    --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.5);
    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.6);
    --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.7);
- 
+
    /* Semantic */
    --color-success: #27ae60;
    --color-success-subtle: #0d2318;
@@ -47,11 +47,11 @@
    --color-error-subtle: #2a1010;
    --color-info: #2980b9;
    --color-info-subtle: #0d1e2a;
- 
+
    /* Scrollbar */
    --color-scrollbar-thumb: #3a5075;
    --color-scrollbar-track: #0f1825;
- }
+}
 
 * {
    padding: 0;
@@ -68,10 +68,31 @@ body {
 .hide {
    display: none;
    visibility: hidden;
-   pointer-events:none;
+   pointer-events: none;
+}
+
+main {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: 100%;
 }
 
 /* Second Layer */
+
+.deployment-layer {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   gap: 1rem;
+}
+
+.board-container {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 1rem;
+}
 
 .board {
    display: grid;
@@ -91,4 +112,38 @@ body {
 
 .cell:hover {
    background-color: var(--color-hover-bg);
+}
+
+/* === Ships */
+
+
+.docks-container {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   gap: 1rem;
+}
+
+.ships {
+   padding: 4px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 4px;
+   border: 1px solid var(--color-surface-overlay);
+   border-radius: 12px;
+   cursor: grab;
+}
+
+.ships.dragging {
+   opacity: 0.5;
+   cursor: grabbing;
+}
+
+.ships > .blocks {
+   width: 10px;
+   height: 10px;
+   border-radius: 50%;
+   background-color: var(--color-border-strong);
 }

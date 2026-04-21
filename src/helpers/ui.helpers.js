@@ -1,37 +1,3 @@
-// Logic - Helpers
-
-export function isPosEmpty(board, positions) {
-   console.log(board)
-   for (const currPos of positions) {
-      const [x, y] = currPos
-
-      console.log(x, y)
-      if (board[x][y] !== 0) {
-         return false
-      }
-   }
-   return true
-}
-
-export function isPosValid(positions) {
-   for (const currPos of positions) {
-      const [x, y] = currPos
-      if (x >= 10 || y >= 10 || x < 0 || y < 0) {
-         return false
-      }
-   }
-   return true
-}
-
-export function generatePos(length, x, y, isVertical) {
-   const positions = [[x, y]]
-   for (let i = 0; i < length - 1; i++) {
-      const [x, y] = positions[positions.length - 1]
-      isVertical ? positions.push([x - 1, y]) : positions.push([x, y + 1])
-   }
-   return positions
-}
-
 // UI - Helpers
 
 export function hide(element) {
@@ -59,7 +25,7 @@ export function renderBoard(owne) {
 }
 
 export function markCell(event) {
-   document.querySelectorAll('.cell').forEach(c => c.className = 'cell')
+   document.querySelectorAll('.cell').forEach(c => (c.className = 'cell'))
    const cell = event.target
    cell.classList.add('marked')
 }
@@ -67,4 +33,42 @@ export function markCell(event) {
 export function extractCoords() {
    const cell = document.querySelector('.marked')
    return cell.id.split('-').map(c => parseInt(c))
+}
+
+// Drag and Drop
+
+export function attachDrag() {
+   const draggable = document.querySelectorAll('.ships')
+   const dropzone = document.querySelectorAll('.cell')
+
+   draggable.forEach(node => {
+      node.addEventListener('dragstart', (e) => {
+         e.dataTransfer.setData('text/plain', e.target.id)
+         console.log('dragging');
+         node.classList.add('dragging')
+      })
+
+      node.addEventListener('dragend', (e) => {
+         node.classList.remove('dragging')
+         console.log('dropped');
+         
+      })
+   })
+
+   dropzone.forEach(node => {
+      node.addEventListener('dragover', (e) => {
+         e.preventDefault()
+      })
+
+      node.addEventListener('drop', (e) => {
+         e.preventDefault()
+      
+         const id = e.dataTransfer.getData('text/plain')
+         const draggedElement = document.getElementById(id)
+      
+         e.currentTarget.appendChild(draggedElement)
+      
+         console.log('dropped on dropzone')
+      })
+   })
 }

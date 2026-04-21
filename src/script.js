@@ -3,7 +3,8 @@ import DOM from './scripts/dom.js'
 import Controller from './scripts/controller.js'
 import Gameboard from './scripts/gameboard.js'
 import Ship from './scripts/ship.js'
-import { isPosEmpty, isPosValid, generatePos, hide, unhide, renderBoard, markCell, extractCoords } from './helpers/ui.helpers.js'
+import { isPosEmpty, isPosValid, generatePos } from './helpers/logic.helper.js'
+import { hide, unhide, renderBoard, markCell, extractCoords, attachDrag } from './helpers/ui.helpers.js'
 
 ;(function () {
    document.querySelector('#start-btn').addEventListener('click', initGame)
@@ -21,6 +22,7 @@ function initGame() {
    hide(front)
    unhide(deploy)
    deploy.querySelector('.board-container').append(board)
+   attachDrag()
 }
 
 function initShips() {
@@ -28,14 +30,13 @@ function initShips() {
    const CONTROLLER = new Controller()
    const GAMEBOARD = new Gameboard()
    const [x, y] = extractCoords()
-   // User Click -> get the positoin where the user click
+   // User Click -> get the position where the user click
    // -> generate coords -> validate the coordinates using the gameboard variable here
    // -> if passed create a ship element then pass it to the gameboard.setupShip()
-
+   
    const positions = generatePos(2, x, y, false) // The ship length and direction here is temp
    if (isPosEmpty(GAMEBOARD.board, positions) && isPosValid(positions)) {
       new Ship(GAMEBOARD, 2, positions)
-      console.log('Working');
    }
 }
 
