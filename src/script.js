@@ -3,43 +3,52 @@ import DOM from './scripts/dom.js'
 import Controller from './scripts/controller.js'
 import Gameboard from './scripts/gameboard.js'
 import Ship from './scripts/ship.js'
+import { hide, unhide, renderBoard, markCell, attachDrag } from './helpers/ui.helpers.js'
 import { isPosEmpty, isPosValid, generatePos } from './helpers/logic.helper.js'
-import { hide, unhide, renderBoard, markCell, extractCoords, attachDrag } from './helpers/ui.helpers.js'
 
 ;(function () {
    document.querySelector('#start-btn').addEventListener('click', initGame)
-   document.querySelector('#continue').addEventListener('click', initShips)
+   document.querySelector('#continue').addEventListener('click', initBattle)
 })()
 
 function initGame() {
    const front = document.querySelector('.front-layer')
    const deploy = document.querySelector('.deployment-layer')
-   const battle = document.querySelector('.battle-layer')
 
+   const gameboard = new Gameboard()
    const board = renderBoard()
+   const isVerticalRef = { current: false }
+   const shipHandler = initShips(gameboard, isVerticalRef)
+
    board.addEventListener('click', markCell)
+   attachDrag(board, shipHandler, isVerticalRef)
 
    hide(front)
    unhide(deploy)
    deploy.querySelector('.board-container').append(board)
-   attachDrag()
 }
 
-function initShips() {
-   // Hindi na need ng own config ng sheeps dito since mang gagaling ang config ng ship sa element na iddrag ni user sa board
-   const CONTROLLER = new Controller()
-   const GAMEBOARD = new Gameboard()
-   const [x, y] = extractCoords()
-   // User Click -> get the position where the user click
-   // -> generate coords -> validate the coordinates using the gameboard variable here
-   // -> if passed create a ship element then pass it to the gameboard.setupShip()
-   
-   const positions = generatePos(2, x, y, false) // The ship length and direction here is temp
-   if (isPosEmpty(GAMEBOARD.board, positions) && isPosValid(positions)) {
-      new Ship(GAMEBOARD, 2, positions)
+function initShips(gameboard, isVerticalRef) {
+   return {
+      canPlace: (length, x, y) => {
+         const positions = generatePos(length, x, y, isVerticalRef.current)
+         return isPosValid(positions) && isPosEmpty(gameboard.board, positions)
+      },
+      placeShip: (id, length, x, y) => {
+         const positions = generatePos(length, x, y, isVerticalRef.current)
+         gameboard.setShip({ length, hits: 0, id }, positions)
+         return positions
+      }
    }
 }
 
-function initArena() {
+function initBattle() {
+   const front = document.querySelector('.front-layer')
+   const deploy = document.querySelector('.deployment-layer')
+   const battle = document.querySelector('.battle-layer')
 
+   hide(deploy)
+   unhide(battle)
 }
+
+function initArena() {}

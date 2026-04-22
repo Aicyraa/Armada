@@ -26,8 +26,8 @@ export function isPosValid(positions) {
 export function generatePos(length, x, y, isVertical) {
    const positions = [[x, y]]
    for (let i = 0; i < length - 1; i++) {
-      const [x, y] = positions[positions.length - 1]
-      isVertical ? positions.push([x - 1, y]) : positions.push([x, y + 1])
+      const [lastX, lastY] = positions[positions.length - 1]
+      isVertical ? positions.push([lastX + 1, lastY]) : positions.push([lastX, lastY + 1])
    }
    return positions
 }
