@@ -16,8 +16,8 @@ export default class Controller {
       return currentPlayer === this.human ? this.computer.gameboard : this.human.gameboard
    }
 
-   init(humanGB) {
-      this.human = new Player(humanGB, 'Jee')
+   init(humanGB, name) {
+      this.human = new Player(humanGB, name)
       this.computer = new Computer(new Gameboard())
       this.currentPlayer = this.human
    }
