@@ -1,3 +1,5 @@
+import gameMusicPath from '../assets/gameMusic.mp3'
+
 let backgroundMusic = null
 let isMuted = false
 let audioContext = null
@@ -11,7 +13,7 @@ function getAudioContext() {
 
 export function playBackgroundMusic() {
    if (backgroundMusic) return
-   backgroundMusic = new Audio('./assets/gameMusic.mp3')
+   backgroundMusic = new Audio(gameMusicPath)
    backgroundMusic.loop = true
    backgroundMusic.volume = 0.3
    backgroundMusic.play().catch(() => {})

@@ -125,6 +125,15 @@ function initShips(isVerticalRef) {
 function initBattle() {
    const deploy = document.querySelector('.deployment-layer')
    const battle = document.querySelector('.battle-layer')
+   const docksContainer = deploy.querySelector('.docks-container')
+   const shipsError = deploy.querySelector('.ships-error')
+
+   if (docksContainer.children.length > 0) {
+      shipsError.classList.remove('hide')
+      return
+   }
+
+   shipsError.classList.add('hide')
 
    const nameInput = deploy.querySelector('#name')
    const nameError = deploy.querySelector('.name-error')

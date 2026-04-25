@@ -16,6 +16,7 @@
                <input type="text" id="name" required placeholder="Name" maxlength="20" />
                <span class="name-error hide">Please enter a name (2-20 characters)</span>
             </div>
+            <span class="ships-error hide">Please deploy all ships before continuing</span>
             <div class="board-container">
                <div class="docks-container">
                   <div class="ships" id="patrol-boat" data-length="2" draggable="true">
@@ -43,8 +44,16 @@
                <div class="vs">VS</div>
                <div class="computer-name" id="computer-name"></div>
             </div>
-            <div class="player-area"></div>
-            <div class="enemy-area"></div>
+            <div class="arenas">
+               <div class="arena player">
+                  <div class="arena-label">YOUR FLEET</div>
+                  <div class="player-area"></div>
+               </div>
+               <div class="arena enemy">
+                  <div class="arena-label">ENEMY WATERS</div>
+                  <div class="enemy-area"></div>
+               </div>
+            </div>
             <button id="mute-btn" aria-label="Toggle music">🔊</button>
          </div>
       </main>
