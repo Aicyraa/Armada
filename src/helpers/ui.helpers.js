@@ -34,6 +34,8 @@ export function renderOwnBoard(gameboard) {
             cells[i][j].classList.add('ship')
             cells[i][j].dataset.shipId = content.id
             if (content.hits > 0) cells[i][j].classList.add('damaged')
+            const span = createShipElement(content.id, 0)
+            cells[i][j].appendChild(span)
          }
       }
    }
@@ -66,8 +68,18 @@ export function attackCell(event, enemyGB) {
    const x = parseInt(cell.dataset.row)
    const y = parseInt(cell.dataset.col)
    const result = enemyGB.receiveAtk(x, y)
+   if (!result) return
 
-   cell.classList.add(result.hit ? 'hit' : 'miss')
+   if (result.hit) {
+      cell.classList.add('hit')
+      cell.style.backgroundColor = '#f97575'
+   } else {
+      cell.classList.add('miss')
+      cell.style.backgroundColor = '#f5f2f2'
+      const span = document.createElement('span')
+      span.className = 'blocks'
+      cell.appendChild(span)
+   }
    return { x, y, hit: result.hit }
 }
 

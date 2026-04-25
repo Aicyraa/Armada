@@ -53,7 +53,7 @@ export default class Computer extends Player {
          const target = this.#potentialTargets.pop()
          const [x, y] = target
 
-         if (!this.#triedShots.has(`${x},${y}`) && x >= 0 && x < 5 && y >= 0 && y < 5) {
+         if (!this.#triedShots.has(`${x},${y}`) && x >= 0 && x < 10 && y >= 0 && y < 10) {
             this.#triedShots.add(`${x},${y}`)
             return [x, y]
          }
@@ -61,9 +61,9 @@ export default class Computer extends Player {
 
       // Random hunt mode
       let attempts = 0
-      while (attempts < 25) {
-         const x = Math.floor(Math.random() * 5)
-         const y = Math.floor(Math.random() * 5)
+      while (attempts < 100) {
+         const x = Math.floor(Math.random() * 10)
+         const y = Math.floor(Math.random() * 10)
 
          if (!this.#triedShots.has(`${x},${y}`)) {
             this.#triedShots.add(`${x},${y}`)
