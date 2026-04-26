@@ -90,3 +90,43 @@ export function createShipElement(shipId, partIndex) {
    span.dataset.part = partIndex
    return span
 }
+
+export function showWinModal(isVictory, playerName, onPlayAgain) {
+   const modal = document.querySelector('.win-modal')
+   const backdrop = document.querySelector('.win-backdrop')
+
+   // Reset classes
+   modal.classList.remove('victory', 'defeat')
+   modal.classList.add(isVictory ? 'victory' : 'defeat')
+
+   // Set content
+   modal.querySelector('.win-title').textContent = isVictory ? 'Victory' : 'Defeat'
+   modal.querySelector('.winner-name').textContent = playerName
+
+   // Show modal
+   hide(backdrop)
+   hide(modal)
+   unhide(backdrop)
+   unhide(modal)
+
+   // Wire buttons
+   const playAgainBtn = document.querySelector('#play-again-btn')
+   const mainMenuBtn = document.querySelector('#main-menu-btn')
+
+   // Remove old listeners
+   playAgainBtn?.replaceWith(playAgainBtn.cloneNode(true))
+   mainMenuBtn?.replaceWith(mainMenuBtn.cloneNode(true))
+
+   // Add new listeners
+   document.querySelector('#play-again-btn').addEventListener('click', () => {
+      hide(backdrop)
+      hide(modal)
+      onPlayAgain?.()
+   })
+
+   document.querySelector('#main-menu-btn').addEventListener('click', () => {
+      hide(backdrop)
+      hide(modal)
+      location.reload()
+   })
+}

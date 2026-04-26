@@ -2,7 +2,7 @@ import './style.css'
 import Controller from './scripts/controller.js'
 import Gameboard from './scripts/gameboard.js'
 import Ship from './scripts/ship.js'
-import { hide, unhide, renderOwnBoard, renderEnemyBoard, attackCell } from './helpers/ui.helpers.js'
+import { hide, unhide, renderOwnBoard, renderEnemyBoard, attackCell, showWinModal } from './helpers/ui.helpers.js'
 import { isPosEmpty, isPosValid, generatePos } from './helpers/logic.helper.js'
 import { playBackgroundMusic, toggleMute, playSound } from './helpers/audio.helper.js'
 
@@ -181,7 +181,7 @@ function initArena() {
          playSound(result.hit ? 'shot_hit' : 'shot_miss')
          if (controller.computer.gameboard.areAllShipsSunk()) {
             gameOver = true
-            alert(`${controller.human.name} wins!`)
+            showWinModal(true, controller.human.name, resetGame)
             return
          }
          setTimeout(computerTurn, 500)
@@ -220,6 +220,13 @@ function computerTurn() {
 
    if (controller.human.gameboard.areAllShipsSunk()) {
       gameOver = true
-      alert(`${controller.computer.name} wins!`)
+      showWinModal(false, controller.human.name, resetGame)
    }
+}
+
+function resetGame() {
+   hide(document.querySelector('.battle-layer'))
+   unhide(document.querySelector('.front-layer'))
+   const startBtn = document.querySelector('#start-btn')
+   startBtn?.click()
 }
