@@ -34,10 +34,27 @@
    --color-grid-hover: rgba(201, 162, 39, 0.3);
    --color-grid-ship: rgba(184, 115, 51, 0.4);
 
+   /* Ship colors - naval steel */
+   --color-ship-hull: #2a3a4a;
+   --color-ship-hull-light: #3a4a5a;
+   --color-ship-deck: #1a2830;
+   --color-ship-rivet: #4a5a6a;
+   --color-ship-edge: #5a6a7a;
+
+   /* Hit/impact colors - explosive ordnance */
+   --color-hit-core: #ff3300;
+   --color-hit-mid: #cc2200;
+   --color-hit-outer: #881100;
+   --color-hit-scorch: #1a0a0a;
+   --color-hit-spark: #ffaa00;
+   --color-hit-smoke: rgba(100, 100, 100, 0.6);
+
    /* Glow effects */
    --glow-brass: 0 0 20px rgba(201, 162, 39, 0.3);
    --glow-accent: 0 0 15px rgba(192, 57, 43, 0.5);
    --glow-sea: 0 0 25px rgba(23, 162, 162, 0.4);
+   --glow-hit: 0 0 30px rgba(255, 51, 0, 0.8), 0 0 60px rgba(255, 100, 0, 0.4);
+   --glow-ship: 0 2px 8px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.1);
 
    /* Depth shadows */
    --shadow-inset: inset 0 2px 8px rgba(0, 0, 0, 0.6);
@@ -300,11 +317,29 @@ main {
 }
 
 .ships > .blocks {
-   width: 12px;
-   height: 12px;
+   width: 14px;
+   height: 14px;
+   border-radius: 3px;
+   background: linear-gradient(135deg, var(--color-ship-hull-light) 0%, var(--color-ship-hull) 50%, var(--color-ship-deck) 100%);
+   border: 1px solid var(--color-ship-rivet);
+   box-shadow:
+      inset 0 1px 2px rgba(255, 255, 255, 0.15),
+      inset 0 -1px 2px rgba(0, 0, 0, 0.4),
+      0 2px 4px rgba(0, 0, 0, 0.3);
+   position: relative;
+}
+
+.ships > .blocks::after {
+   content: '';
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   width: 4px;
+   height: 4px;
    border-radius: 50%;
-   background: radial-gradient(circle at 30% 30%, var(--color-copper-light), var(--color-copper));
-   box-shadow: inset 0 -2px 4px rgba(0,0,0,0.4);
+   background: radial-gradient(circle at 30% 30%, var(--color-ship-rivet), #2a3a4a);
+   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* === GAME BOARD === */
@@ -355,16 +390,58 @@ main {
 }
 
 .cell.ship {
-   background: var(--color-grid-ship);
-   border-color: var(--color-copper);
+   background: linear-gradient(135deg, var(--color-ship-hull-light) 0%, var(--color-ship-hull) 40%, var(--color-ship-deck) 100%);
+   border: 1px solid var(--color-ship-edge);
+   box-shadow:
+      var(--glow-ship),
+      inset 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.cell.ship::before {
+   content: '';
+   position: absolute;
+   inset: 2px;
+   border: 1px dashed rgba(74, 90, 106, 0.3);
+   pointer-events: none;
+   opacity: 0.5;
 }
 
 .cell.ship .blocks {
-   width: 8px;
-   height: 8px;
+   width: 10px;
+   height: 10px;
+   border-radius: 2px;
+   background: linear-gradient(135deg, var(--color-ship-hull-light) 0%, var(--color-ship-hull) 100%);
+   border: 1px solid var(--color-ship-rivet);
+   box-shadow:
+      inset 0 1px 2px rgba(255, 255, 255, 0.1),
+      inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+      0 1px 3px rgba(0, 0, 0, 0.4);
+   position: relative;
+}
+
+.cell.ship .blocks::after {
+   content: '';
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   width: 3px;
+   height: 3px;
    border-radius: 50%;
-   background: radial-gradient(circle at 30% 30%, var(--color-brass), var(--color-brass-dim));
-   box-shadow: 0 0 8px rgba(201, 162, 39, 0.5), inset 0 -2px 4px rgba(0,0,0,0.5);
+   background: radial-gradient(circle at 30% 30%, var(--color-ship-rivet), #1a2830);
+}
+
+.cell.ship.damaged {
+   background: linear-gradient(135deg, #3a2a2a 0%, var(--color-ship-hull) 40%, #2a1a1a 100%);
+   border-color: var(--color-hit-mid);
+   box-shadow:
+      0 0 15px rgba(255, 51, 0, 0.3),
+      inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.cell.ship.damaged .blocks {
+   background: linear-gradient(135deg, #4a3a3a 0%, #3a2a2a 100%);
+   border-color: var(--color-hit-outer);
 }
 
 .cell.ship.vertical {
@@ -372,17 +449,86 @@ main {
 }
 
 .cell.hit {
-   background: radial-gradient(circle at center, var(--color-accent) 0%, var(--color-accent-dim) 100%);
-   box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5), 0 0 20px var(--color-accent-glow);
-   animation: hitPulse 0.6s ease-out;
+   background:
+      radial-gradient(circle at center,
+         var(--color-hit-core) 0%,
+         var(--color-hit-mid) 25%,
+         var(--color-hit-outer) 50%,
+         var(--color-hit-scorch) 70%,
+         transparent 80%),
+      radial-gradient(ellipse at 30% 20%,
+         rgba(255, 170, 0, 0.4) 0%,
+         transparent 40%);
+   box-shadow:
+      inset 0 0 20px rgba(0, 0, 0, 0.8),
+      0 0 25px var(--color-hit-core),
+      0 0 50px var(--color-hit-mid);
+   animation: hitExplosion 0.5s ease-out;
+   border: 1px solid var(--color-hit-core);
+}
+
+.cell.hit::after {
+   content: '';
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   width: 60%;
+   height: 60%;
+   background: radial-gradient(circle at 30% 30%,
+      rgba(255, 170, 0, 0.6) 0%,
+      rgba(255, 51, 0, 0.3) 40%,
+      transparent 70%);
+   border-radius: 50%;
+   animation: emberGlow 1.5s ease-in-out infinite alternate;
+   pointer-events: none;
+}
+
+.cell.hit::before {
+   content: '';
+   position: absolute;
+   inset: -2px;
+   background: conic-gradient(
+      from 0deg,
+      rgba(255, 100, 0, 0.4) 0deg,
+      transparent 30deg,
+      rgba(255, 100, 0, 0.4) 60deg,
+      transparent 90deg,
+      rgba(255, 100, 0, 0.4) 120deg,
+      transparent 150deg,
+      rgba(255, 100, 0, 0.4) 180deg,
+      transparent 210deg,
+      rgba(255, 100, 0, 0.4) 240deg,
+      transparent 270deg,
+      rgba(255, 100, 0, 0.4) 300deg,
+      transparent 330deg,
+      rgba(255, 100, 0, 0.4) 360deg
+   );
+   filter: blur(8px);
+   animation: rotateSparks 3s linear infinite;
+   pointer-events: none;
 }
 
 .cell.hit .blocks {
-   background: radial-gradient(circle at 30% 30%, #ff6b6b, var(--color-accent-active));
+   width: 6px;
+   height: 6px;
+   border-radius: 50%;
+   background: radial-gradient(circle at 30% 30%,
+      var(--color-hit-spark) 0%,
+      var(--color-hit-core) 50%,
+      var(--color-hit-mid) 100%);
+   box-shadow:
+      0 0 10px var(--color-hit-core),
+      0 0 20px var(--color-hit-mid),
+      inset 0 0 4px rgba(0, 0, 0, 0.5);
+   animation: hitSpark 0.3s ease-out;
 }
 
 .cell.miss {
-   background: var(--color-bg-muted);
+   background: radial-gradient(circle at center,
+      rgba(100, 120, 140, 0.3) 0%,
+      rgba(50, 70, 90, 0.2) 40%,
+      transparent 70%);
    display: flex;
    justify-content: center;
    align-items: center;
@@ -390,22 +536,28 @@ main {
 
 .cell.miss::after {
    content: '';
-   width: 10px;
-   height: 10px;
-   border-radius: 50%;
-   background: radial-gradient(circle at 30% 30%, #666, #333);
-   box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
-}
-
-.cell.damaged .blocks {
-   background: radial-gradient(circle at 30% 30%, var(--color-accent-glow), var(--color-accent));
-}
-
-.blocks {
    width: 8px;
    height: 8px;
    border-radius: 50%;
-   background: radial-gradient(circle at 30% 30%, var(--color-brass), var(--color-brass-dim));
+   background: radial-gradient(circle at 30% 30%,
+      rgba(150, 180, 200, 0.6) 0%,
+      rgba(80, 100, 120, 0.4) 50%,
+      rgba(40, 60, 80, 0.3) 100%);
+   box-shadow:
+      0 0 8px rgba(100, 150, 200, 0.3),
+      inset 0 1px 2px rgba(255, 255, 255, 0.2);
+   animation: missRipple 2s ease-out infinite;
+}
+
+.blocks {
+   width: 10px;
+   height: 10px;
+   border-radius: 2px;
+   background: linear-gradient(135deg, var(--color-ship-hull-light) 0%, var(--color-ship-hull) 100%);
+   border: 1px solid var(--color-ship-rivet);
+   box-shadow:
+      inset 0 1px 2px rgba(255, 255, 255, 0.1),
+      inset 0 -1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* === BATTLE LAYER === */
@@ -681,4 +833,69 @@ main {
    0% { transform: scale(1.3); }
    50% { transform: scale(0.95); }
    100% { transform: scale(1); }
+}
+
+@keyframes hitExplosion {
+   0% {
+      transform: scale(1.4);
+      filter: brightness(1.5);
+   }
+   30% {
+      transform: scale(0.95);
+      filter: brightness(1.2);
+   }
+   60% {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+   }
+   100% {
+      transform: scale(1);
+      filter: brightness(1);
+   }
+}
+
+@keyframes emberGlow {
+   0% {
+      opacity: 0.4;
+      transform: translate(-50%, -50%) scale(0.9);
+   }
+   100% {
+      opacity: 0.8;
+      transform: translate(-50%, -50%) scale(1.1);
+   }
+}
+
+@keyframes rotateSparks {
+   from { transform: rotate(0deg); }
+   to { transform: rotate(360deg); }
+}
+
+@keyframes hitSpark {
+   0% {
+      transform: scale(0);
+      opacity: 0;
+   }
+   50% {
+      transform: scale(1.5);
+      opacity: 1;
+   }
+   100% {
+      transform: scale(1);
+      opacity: 1;
+   }
+}
+
+@keyframes missRipple {
+   0% {
+      transform: scale(0.8);
+      opacity: 0.4;
+   }
+   50% {
+      transform: scale(1.1);
+      opacity: 0.7;
+   }
+   100% {
+      transform: scale(0.8);
+      opacity: 0.4;
+   }
 }

@@ -23,8 +23,10 @@ export default class Computer extends Player {
    #setComputerShips() {
       const shipsConfig = [
          { length: 2, name: 'Patrol Boat' },
+         { length: 2, name: 'Patrol Boat' },
          { length: 3, name: 'Destroyer' },
-         { length: 4, name: 'Battleship' },
+         { length: 4, name: 'Station' },
+         { length: 5, name: 'Battleship' },
       ]
       
       for (const ship of shipsConfig) {

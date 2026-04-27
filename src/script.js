@@ -9,9 +9,16 @@ import { playBackgroundMusic, toggleMute, playSound } from './helpers/audio.help
 let gameboard
 let controller
 let gameOver = false
+let muteBtnInitialized = false
 
 ;(function () {
    document.querySelector('#start-btn').addEventListener('click', initGame)
+
+   // Set up mute button once at module load
+   if (!muteBtnInitialized) {
+      document.querySelector('#mute-btn').addEventListener('click', toggleMute)
+      muteBtnInitialized = true
+   }
 })()
 
 function initGame() {
@@ -105,6 +112,9 @@ function initGame() {
    deploy.querySelector('.board-container').append(board)
 
    document.querySelector('#continue').addEventListener('click', initBattle)
+
+   // Start music on front-layer interaction (browser autoplay policy)
+   playBackgroundMusic()
 }
 
 function initShips(isVerticalRef) {
@@ -157,10 +167,6 @@ function initBattle() {
    hide(deploy)
    unhide(battle)
 
-   playBackgroundMusic()
-
-   document.querySelector('#mute-btn').addEventListener('click', toggleMute)
-
    initArena()
 }
 
@@ -206,14 +212,9 @@ function computerTurn() {
    if (cell) {
       if (result.hit) {
          cell.classList.add('hit')
-         cell.style.backgroundColor = '#f97575'
          playSound('shot_hit')
       } else {
          cell.classList.add('miss')
-         cell.style.backgroundColor = '#f5f2f2'
-         const span = document.createElement('span')
-         span.className = 'blocks'
-         cell.appendChild(span)
          playSound('shot_miss')
       }
    }
@@ -227,6 +228,5 @@ function computerTurn() {
 function resetGame() {
    hide(document.querySelector('.battle-layer'))
    unhide(document.querySelector('.front-layer'))
-   const startBtn = document.querySelector('#start-btn')
-   startBtn?.click()
+   // Music already playing from initGame
 }

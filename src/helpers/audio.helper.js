@@ -3,20 +3,40 @@ import gameMusicPath from '../assets/gameMusic.mp3'
 let backgroundMusic = null
 let isMuted = false
 let audioContext = null
+let isMusicStarted = false
 
 function getAudioContext() {
    if (!audioContext) {
       audioContext = new (window.AudioContext || window.webkitAudioContext)()
    }
+   if (audioContext.state === 'suspended') {
+      audioContext.resume()
+   }
    return audioContext
 }
 
 export function playBackgroundMusic() {
+   if (isMusicStarted) return
+   isMusicStarted = true
+
+   // Resume AudioContext if it exists
+   if (audioContext) {
+      getAudioContext()
+   }
+
    if (backgroundMusic) return
    backgroundMusic = new Audio(gameMusicPath)
    backgroundMusic.loop = true
    backgroundMusic.volume = 0.3
-   backgroundMusic.play().catch(() => {})
+
+   // Ensure AudioContext is ready
+   getAudioContext()
+
+   backgroundMusic.play().then(() => {
+      console.log('Music started playing')
+   }).catch(err => {
+      console.log('Music playback failed:', err)
+   })
 }
 
 export function stopBackgroundMusic() {
@@ -28,13 +48,25 @@ export function stopBackgroundMusic() {
 
 export function toggleMute() {
    isMuted = !isMuted
+
    if (backgroundMusic) {
       backgroundMusic.muted = isMuted
    }
+
+   // Also mute AudioContext sounds
+   if (audioContext) {
+      audioContext.suspend().then(() => {
+         if (!isMuted) audioContext.resume()
+      })
+   }
+
    const btn = document.querySelector('#mute-btn')
    if (btn) {
       btn.textContent = isMuted ? '🔇' : '🔊'
+      btn.setAttribute('aria-label', isMuted ? 'Unmute' : 'Mute')
    }
+
+   console.log('Mute toggled:', isMuted)
 }
 
 export function playSound(type) {

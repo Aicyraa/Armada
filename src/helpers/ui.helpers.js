@@ -72,13 +72,8 @@ export function attackCell(event, enemyGB) {
 
    if (result.hit) {
       cell.classList.add('hit')
-      cell.style.backgroundColor = '#f97575'
    } else {
       cell.classList.add('miss')
-      cell.style.backgroundColor = '#f5f2f2'
-      const span = document.createElement('span')
-      span.className = 'blocks'
-      cell.appendChild(span)
    }
    return { x, y, hit: result.hit }
 }
