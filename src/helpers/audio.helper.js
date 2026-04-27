@@ -80,40 +80,96 @@ export function playSound(type) {
 
    switch (type) {
       case 'fire_shot': {
+         // Cannon-like explosion sound
          const osc = ctx.createOscillator()
+         const noise = createNoiseBuffer(ctx)
+         const noiseGain = ctx.createGain()
+         noiseGain.connect(ctx.destination)
+
          osc.connect(gain)
          osc.type = 'sawtooth'
-         osc.frequency.setValueAtTime(150, now)
-         osc.frequency.exponentialRampToValueAtTime(50, now + 0.15)
-         gain.gain.setValueAtTime(0.3, now)
-         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15)
+         osc.frequency.setValueAtTime(120, now)
+         osc.frequency.exponentialRampToValueAtTime(40, now + 0.2)
+
+         // Add noise burst for explosion effect
+         const noiseNode = ctx.createBufferSource()
+         noiseNode.buffer = noise
+         noiseNode.connect(noiseGain)
+         noiseGain.gain.setValueAtTime(0.4, now)
+         noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.2)
+         noiseNode.start(now)
+         noiseNode.stop(now + 0.2)
+
+         gain.gain.setValueAtTime(0.4, now)
+         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2)
          osc.start(now)
-         osc.stop(now + 0.15)
+         osc.stop(now + 0.2)
          break
       }
       case 'shot_hit': {
+         // Metallic impact with explosion
          const osc = ctx.createOscillator()
+         const noise = createNoiseBuffer(ctx)
+         const noiseGain = ctx.createGain()
+         noiseGain.connect(ctx.destination)
+
          osc.connect(gain)
          osc.type = 'square'
-         osc.frequency.setValueAtTime(880, now)
-         osc.frequency.setValueAtTime(440, now + 0.05)
-         gain.gain.setValueAtTime(0.2, now)
+         osc.frequency.setValueAtTime(600, now)
+         osc.frequency.exponentialRampToValueAtTime(150, now + 0.15)
+
+         // Sharp noise burst for impact
+         const noiseNode = ctx.createBufferSource()
+         noiseNode.buffer = noise
+         noiseNode.connect(noiseGain)
+         noiseGain.gain.setValueAtTime(0.5, now)
+         noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15)
+         noiseNode.start(now)
+         noiseNode.stop(now + 0.15)
+
+         gain.gain.setValueAtTime(0.3, now)
          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2)
          osc.start(now)
          osc.stop(now + 0.2)
          break
       }
       case 'shot_miss': {
-         const osc = ctx.createOscillator()
-         osc.connect(gain)
-         osc.type = 'sine'
-         osc.frequency.setValueAtTime(220, now)
-         osc.frequency.exponentialRampToValueAtTime(110, now + 0.3)
-         gain.gain.setValueAtTime(0.15, now)
-         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3)
-         osc.start(now)
-         osc.stop(now + 0.3)
+         // Water splash sound
+         const noise = createNoiseBuffer(ctx)
+         const noiseGain = ctx.createGain()
+         noiseGain.connect(ctx.destination)
+
+         const noiseNode = ctx.createBufferSource()
+         noiseNode.buffer = noise
+
+         // Filter for water-like sound
+         const filter = ctx.createBiquadFilter()
+         filter.type = 'bandpass'
+         filter.frequency.setValueAtTime(800, now)
+         filter.Q.value = 0.5
+
+         noiseNode.connect(filter)
+         filter.connect(noiseGain)
+
+         noiseGain.gain.setValueAtTime(0.25, now)
+         noiseGain.gain.linearRampToValueAtTime(0.3, now + 0.1)
+         noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.4)
+
+         noiseNode.start(now)
+         noiseNode.stop(now + 0.4)
          break
       }
    }
+}
+
+function createNoiseBuffer(ctx) {
+   const bufferSize = ctx.sampleRate * 0.5
+   const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
+   const data = buffer.getChannelData(0)
+
+   for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1
+   }
+
+   return buffer
 }
